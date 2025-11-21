@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Minion Tarot — 7 карт з 12 🔮</title>
+
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Minions Tarot 🍌</h1>
+    </header>
+
+    <main class="panel">
+      <!-- Вступ -->
+      <section id="stage-intro" class="stage fade">
+        <div class="hint">
+          Перемішай колоду, щоб зарядити карти своєю енергією — і обери 7 з 12 🔮
+        </div>
+        <div class="center">
+          <button id="btn-shuffle" class="btn primary">🌀 Перемішати колоду</button>
+        </div>
+      </section>
+
+      <!-- Перемішування -->
+      <section id="stage-shuffle" class="stage hidden">
+        <div class="hint" id="shuffle-caption">Міньйони тасують карти…</div>
+
+        <div class="shuffle-scene">
+          <div class="shuffle-table"></div>
+
+          <div class="shuffle-deck">
+            <!-- 20 карт анімації shuffle -->
+            <img src="images/cards/back_minion.jpg" class="s-card c1">
+            <img src="images/cards/back_minion.jpg" class="s-card c2">
+            <img src="images/cards/back_minion.jpg" class="s-card c3">
+            <img src="images/cards/back_minion.jpg" class="s-card c4">
+            <img src="images/cards/back_minion.jpg" class="s-card c5">
+            <img src="images/cards/back_minion.jpg" class="s-card c6">
+            <img src="images/cards/back_minion.jpg" class="s-card c7">
+            <img src="images/cards/back_minion.jpg" class="s-card c8">
+            <img src="images/cards/back_minion.jpg" class="s-card c9">
+            <img src="images/cards/back_minion.jpg" class="s-card c10">
+            <img src="images/cards/back_minion.jpg" class="s-card c11">
+            <img src="images/cards/back_minion.jpg" class="s-card c12">
+            <img src="images/cards/back_minion.jpg" class="s-card c13">
+            <img src="images/cards/back_minion.jpg" class="s-card c14">
+            <img src="images/cards/back_minion.jpg" class="s-card c15">
+            <img src="images/cards/back_minion.jpg" class="s-card c16">
+            <img src="images/cards/back_minion.jpg" class="s-card c17">
+            <img src="images/cards/back_minion.jpg" class="s-card c18">
+            <img src="images/cards/back_minion.jpg" class="s-card c19">
+            <img src="images/cards/back_minion.jpg" class="s-card c20">
+          </div>
+        </div>
+      </section>
+
+      <!-- Вибір 12 карт -->
+      <section id="stage-pick" class="stage hidden">
+        <div class="hint" id="card-title">Довірся своїй інтуїції та обери 7 карт</div>
+        <div id="selected-names" class="selected-names hidden"></div>
+        <div id="cards" class="cards"></div>
+
+        <div class="center" id="send-block" style="margin-top:14px; display:none;">
+          <button id="btn-send" class="btn primary">📩 Зробити розклад</button>
+        </div>
+      </section>
+    </main>
+
+    <footer>© Minion Tarot — 2025 | Весело і магічно 🍌</footer>
+  </div>
+
+  <!-- Звук тасування -->
+  <audio id="shuffle-audio" src="sounds/shuffle.mp3" preload="auto"></audio>
+  <audio id="flip-audio" src="sounds/flip.mp3" preload="auto"></audio>
+  
+  <!-- Повноекранний перегляд карти -->
+  <div id="card-modal" class="card-modal hidden">
+    <div class="card-modal-backdrop"></div>
+    <div class="card-modal-inner">
+      <img id="card-modal-img" src="" alt="Tarot card">
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

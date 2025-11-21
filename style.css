@@ -1,0 +1,360 @@
+/* 🌈 1. Глобальні змінні теми */
+:root {
+  --accent: #ffde59;      /* Жовтий міньйон-акцент */
+  --muted: #b4b4b4;       /* Приглушений сірий текст */
+  --card-w: 90px;         /* Ширина карти */
+  --card-h: 150px;        /* Висота карти */
+  --radius: 8px;          /* Радіус скруглення */
+  --dur: 1000ms;          /* Тривалість фліпу карти (обертання) */
+}
+
+/* 📱 Дуже маленькі екрани (≤ 370px) */
+@media (max-width: 370px) {
+  :root {
+    --card-w: 80px;
+    --card-h: 130px;
+  }
+
+  .cards {
+    gap: 10px;
+  }
+}
+
+/* Базова сітка та фон */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  font-family: "Comic Neue", system-ui;
+  color: #fff8d9;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, .7);
+  background: radial-gradient(circle at 50% 20%, #2e3192 0%, #1b1464 40%, #0b0f14 90%);
+  background-image: url("images/bg_minion_magic.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+/* Загальна сітка */
+.wrap {
+  min-height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;  /* header, main, footer */
+  gap: 10px;
+}
+
+/* Хедер */
+header {
+  text-align: center;
+  padding: 16px 8px 0;
+}
+header h1 {
+  margin: 0;
+  font-size: 30px;
+  color: var(--accent);
+  text-shadow: 0 0 6px rgba(0, 0, 0, .8);
+}
+.subtitle {
+  font-size: 16px;
+  color: var(--muted);
+  margin: 4px 0 0;
+}
+
+/* Панель / сцени */
+.panel {
+  width: 100%;
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 16px;
+}
+.stage {
+  background: rgba(0, 0, 0, 0.35);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  padding: 10px;
+}
+.hint {
+  color: var(--muted);
+  font-size: 16px;
+  margin: 6px 0 20px;
+  text-align: center;
+}
+
+/* Центрований контейнер (кнопки) */
+.center {
+  margin-top: 200px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Кнопки */
+.btn {
+  appearance: none;
+  border: 2px solid var(--accent);
+  background: linear-gradient(180deg, #3c3e7a, #1b1464);
+  color: #fff;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .4);
+}
+.btn.primary {
+  background: linear-gradient(180deg, var(--accent), #e8c22a);
+  color: #1b1464;
+}
+.btn:active { transform: translateY(1px); }
+
+/* Контейнер для карт */
+.cards {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 5px;
+  position: relative;
+  transition: height .4s ease;
+}
+
+/* Окрема карта */
+.card {
+  width: var(--card-w);
+  height: var(--card-h);
+  perspective: 1000px;
+  border-radius: var(--radius);
+  position: relative;
+
+  transition: transform 0.9s ease, left 0.9s ease, top 0.9s ease;
+
+  /* Плаваюча анімація поки карти ще не вибрані */
+  animation: float 3.4s ease-in-out infinite;
+}
+
+.card:hover {
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.65);
+  cursor: pointer;
+}
+
+/* Коли карта вже відкрита – зупиняємо "плавання" */
+.card.revealed {
+  animation: none;
+}
+
+/* Фліп карти */
+.card.flip .card-inner {
+  transform: rotateY(180deg);
+}
+
+/* Внутрішній контейнер */
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform var(--dur) ease;
+}
+
+/* Сторони карти */
+.face {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+  backface-visibility: hidden;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, .5),
+              inset 0 0 0 2px rgba(255, 222, 89, .4);
+}
+
+/* Задня сторона – сорочка */
+.face.back {
+  background: url("images/cards/back_minion.jpg") center/cover no-repeat;
+}
+
+/* Передня сторона */
+.face.front {
+  transform: rotateY(180deg);
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.6s ease;
+}
+
+/* Перевернута карта (догори ногами) */
+.face.front.reversed {
+  transform: rotateY(180deg) rotate(180deg);
+}
+
+/* Футер */
+footer {
+  text-align: center;
+  color: #bfbfbf;
+  font-size: 13px;
+  padding: 12px;
+}
+
+/* Станові класи */
+.hidden { display: none !important; }
+.fade { animation: fade .35s ease both; }
+
+@keyframes fade {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Плаваюча анімація карт у режимі вибору */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+/* Світіння відкритої карти */
+.card.revealed {
+  box-shadow: 0 0 20px rgba(255, 222, 89, 0.8),
+              0 0 40px rgba(255, 222, 89, 0.4),
+              0 0 60px rgba(255, 222, 89, 0.2);
+  transform: scale(1.04);
+}
+
+/* Затемнення невибраних */
+.card.dimmed {
+  filter: brightness(0.5) blur(0.5px);
+  transform: scale(0.95);
+  transition: all 0.4s ease;
+}
+
+/* Плавна поява блоку "Зробити розклад" */
+#send-block {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .4s ease, transform .4s ease;
+}
+#send-block.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 🎬 Сцена тасування */
+.shuffle-scene {
+  width: 100%;
+  height: 380px;
+  position: relative;
+  margin-top: 15px;
+}
+
+/* Стіл для тасування */
+.shuffle-table {
+  width: 100%;
+  height: 350px;
+  background: rgba(70, 40, 10, 0.6);
+  border-radius: 22px;
+  position: absolute;
+  bottom: 0;
+  box-shadow: inset 0 0 40px rgba(0,0,0,0.5);
+  border: 2px solid rgba(255,255,255,0.15);
+}
+
+/* Зона, де літають сорочки */
+.shuffle-deck {
+  position: absolute;
+  bottom: 200px;
+  left: 50%;
+  transform: translateX(-40px);
+  width: 180px;
+  height: 120px;
+}
+
+/* Окремі карти для анімації тасування */
+.s-card {
+  width: 80px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid #d4b76d;
+  position: absolute;
+  left: 0; top: 0;
+  opacity: 0;
+  transform-origin: center;
+  animation: shuffle 3s infinite ease-in-out;
+}
+
+/* Траєкторії (як було) */
+.c1  { animation-delay: 0s;   --x1: -60px; --y1: 40px;  --r1: -20deg; --x2: -110px; --y2: 90px;  --r2: -45deg; }
+.c2  { animation-delay: 0.1s; --x1: 70px;  --y1: 50px;  --r1: 35deg;  --x2: 110px;  --y2: 120px; --r2: 60deg; }
+.c3  { animation-delay: 0.2s; --x1: -30px; --y1: 80px;  --r1: 10deg;  --x2: -65px;  --y2: 150px; --r2: 25deg; }
+.c4  { animation-delay: 0.3s; --x1: 40px;  --y1: 100px; --r1: -30deg; --x2: 70px;   --y2: 160px; --r2: -70deg; }
+.c5  { animation-delay: 0.4s; --x1: -90px; --y1: 60px;  --r1: 45deg;  --x2: -130px; --y2: 110px; --r2: 80deg; }
+.c6  { animation-delay: 0.5s; --x1: 90px;  --y1: 30px;  --r1: -15deg; --x2: 130px;  --y2: 90px;  --r2: -40deg; }
+.c7  { animation-delay: 0.6s; --x1: -20px; --y1: 110px; --r1: -10deg; --x2: -40px;  --y2: 180px; --r2: -35deg; }
+.c8  { animation-delay: 0.7s; --x1: 30px;  --y1: 130px; --r1: 15deg;  --x2: 60px;   --y2: 190px; --r2: 50deg; }
+.c9  { animation-delay: 0.8s; --x1: -70px; --y1: 20px;  --r1: -25deg; --x2: -120px; --y2: 70px;  --r2: -60deg; }
+.c10 { animation-delay: 0.9s; --x1: 50px;  --y1: 60px;  --r1: 12deg;  --x2: 100px;  --y2: 110px; --r2: 40deg; }
+.c11 { animation-delay: 1s;   --x1: 40px;  --y1: 70px;  --r1: -18deg; --x2: 85px;   --y2: 150px; --r2: -55deg; }
+.c12 { animation-delay: 1.1s; --x1: -55px; --y1: 50px;  --r1: 22deg;  --x2: -95px;  --y2: 130px; --r2: 60deg; }
+.c13 { animation-delay: 1.2s; --x1: 15px;  --y1: 120px; --r1: 8deg;   --x2: 45px;   --y2: 190px; --r2: 40deg; }
+.c14 { animation-delay: 1.3s; --x1: -75px; --y1: 90px;  --r1: -28deg; --x2: -140px; --y2: 150px;--r2: -70deg; }
+.c15 { animation-delay: 1.4s; --x1: 60px;  --y1: 40px;  --r1: 18deg;  --x2: 120px;  --y2: 85px; --r2: 45deg; }
+.c16 { animation-delay: 1.5s; --x1: -40px; --y1: 100px; --r1: -12deg; --x2: -70px;  --y2: 180px;--r2: -38deg; }
+.c17 { animation-delay: 1.6s; --x1: 25px;  --y1: 90px;  --r1: 25deg;  --x2: 60px;   --y2: 160px;--r2: 70deg; }
+.c18 { animation-delay: 1.7s; --x1: -85px; --y1: 45px;  --r1: 15deg;  --x2: -140px; --y2: 90px; --r2: 40deg; }
+.c19 { animation-delay: 1.8s; --x1: -20px; --y1: 150px; --r1: -5deg;  --x2: -50px;  --y2: 210px;--r2: -25deg; }
+.c20 { animation-delay: 1.9s; --x1: 80px;  --y1: 70px;  --r1: -30deg; --x2: 130px;  --y2: 140px;--r2: -65deg; }
+
+@keyframes shuffle {
+  0%   { opacity: 0; transform: translate(0,0) rotate(0deg); }
+  15%  { opacity: 1; transform: translate(var(--x1), var(--y1)) rotate(var(--r1)); }
+  45%  { opacity: 1; transform: translate(var(--x2), var(--y2)) rotate(var(--r2)); }
+  85%  { opacity: 1; transform: translate(0,0) rotate(0deg); }
+  100% { opacity: 0; }
+}
+
+/* Повноекранний перегляд карти */
+.card-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.card-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+}
+.card-modal-inner {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9),
+              0 0 30px rgba(255, 222, 89, 0.4);
+}
+.card-modal-inner img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Назви вибраних карт */
+.selected-names {
+  text-align: center;
+  font-size: 18px;
+  color: #ffde59;
+  font-weight: 700;
+  margin: 0 auto 10px auto;
+  padding-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  line-height: 1.22;
+  text-shadow: 0 2px 5px rgba(0,0,0,0.6);
+}
+.selected-names.hidden {
+  display: none;
+}
